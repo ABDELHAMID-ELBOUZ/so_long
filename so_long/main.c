@@ -6,7 +6,7 @@
 /*   By: aelbouz <aelbouz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 09:51:38 by aelbouz           #+#    #+#             */
-/*   Updated: 2025/01/26 15:36:03 by aelbouz          ###   ########.fr       */
+/*   Updated: 2025/02/03 09:57:13 by aelbouz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,25 +21,23 @@ void	free_map(char **map, int j)
 	free (map);
 }
 
-void	f(void)
-{
-	system("leaks so_long");
-}
-
 int	main(int ac, char **av)
 {
-	int		rows;
-	int		cols;
-	t_data	data;
-	// t_game	game;
-	atexit(f);
+	t_game	game;
+
 	if (ac != 2)
 		return (ft_printf("Error\nuse ./so_long [map].ber\n"), exit (0), 0);
 	if (!map_valid(av))
 		return (free_map(av, 0), exit(0), 0);
-	get_map_size(av[1], &rows, &cols);
-	creat_window(&data, cols, rows);
-	// img_to_window(&game, av, rows, cols);
-	mlx_loop(data.mlx);
+	get_map_size(av[1], &game.rows, &game.columns);
+	lines_count(av[1]);
+	game.map = read_map(av[1], game.rows);
+	if (!game.map)
+		return (exit(0), 0);
+	creat_window(&game, game.columns, game.rows);
+	if (!file_to_image(&game))
+		return (free_map(av, 0), exit(0), 0);
+	img_to_window(&game, game.map);
+	mlx_loop(game.mlx);
 	return (0);
 }
