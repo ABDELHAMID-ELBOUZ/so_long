@@ -101,23 +101,3 @@ char	**read_map(char *filename, int count_lines)
 	close(fd);
 	return (map);
 }
-
-int	open_map(char **av)
-{
-	char	**map;
-	int		count_lines;
-	int		i;
-	int		result;
-
-	count_lines = lines_count(av[1]);
-	map = malloc(sizeof(char *) * count_lines + 1);
-	if (!map)
-		return (ft_printf("Error\n Malloc error\n"), exit(0), 0);
-	if (count_lines == 0)
-		return (ft_printf("Error\n file empty error\n"), exit(0), 0);
-	map = read_map(av[1], count_lines);
-	result = map_rect(&map[0]);
-	i = 0;
-	free_map(map, i);
-	return (result);
-}
